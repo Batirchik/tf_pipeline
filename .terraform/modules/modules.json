@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"state_storage","Source":"./modules/terraform-backend","Dir":"modules/terraform-backend"}]}
