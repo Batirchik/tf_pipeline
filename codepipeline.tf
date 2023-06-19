@@ -50,7 +50,7 @@ resource "aws_codepipeline" "this" {
       configuration = {
         ConnectionArn    = var.codestar_connection_arn
         FullRepositoryId = "${var.github_repository_id}"
-        BranchName       = "dev"
+        BranchName       = "main"
         }
     }
   }
