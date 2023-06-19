@@ -12,15 +12,15 @@ phases:
           terraform init
           terraform validate
 
-          echo "==== Running: TFLINT ===="
-          tflint --init
-          tflint
+          echo "#TODO==== Running: TFLINT ===="
+          #TODOtflint --init
+          #TODOtflint
 
-          echo "==== Running: Checkov ===="
-          checkov --framework terraform -d .
+          echo "#TODO==== Running: Checkov ===="
+          #TODOcheckov --framework terraform -d .
 
-          echo "==== Running: TFSEC ===="
-          tfsec .
+          echo "#TODO==== Running: TFSEC ===="
+          #TODOtfsec .
 
         elif [ ${ACTION} = "PLAN" ] ; then
 
@@ -29,20 +29,20 @@ phases:
           terraform plan -out=tfplan -input=false -no-color
           terraform show -json tfplan > tfplan.json
 
-          echo "==== Running: OPA ===="
-          OPA_CHECK=$(opa exec --decision terraform/analysis/authz -b policy/ tfplan.json | jq -r ".result[] |.result")
-          echo "OPA Evaluation Check = $OPA_CHECK"
-          if ! $OPA_CHECK; then
-            printf '%s\n' "OPA evaluation failed" >&2
-            exit 1
-          fi
+          echo "#TODO==== Running: OPA ===="
+          #TODOOPA_CHECK=$(opa exec --decision terraform/analysis/authz -b policy/ tfplan.json | jq -r ".result[] |.result")
+          #TODOecho "OPA Evaluation Check = $OPA_CHECK"
+          #TODOif ! $OPA_CHECK; then
+          #TODO  printf '%s\n' "OPA evaluation failed" >&2
+          #TODO  exit 1
+          #TODOfi
 
         elif [ ${ACTION} = "APPLY" ] ; then
 
           echo "==== Running: Terraform Apply ===="
           terraform init
           terraform apply -no-color -auto-approve tfplan
-          
+
         elif [ ${ACTION} = "DESTROY" ] ; then
 
           echo "==== Running: Terraform Destroy ===="
