@@ -42,12 +42,6 @@ phases:
           echo "==== Running: Terraform Apply ===="
           terraform init
           terraform apply -no-color -auto-approve tfplan
-
-        elif [ ${ACTION} = "DESTROY" ] ; then
-
-          echo "==== Running: Terraform Destroy ===="
-          terraform init
-          terraform destroy -no-color -auto-approve
         fi
 
 artifacts:

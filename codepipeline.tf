@@ -141,44 +141,6 @@ resource "aws_codepipeline" "this" {
       }
     }
   }
-
-  stage {
-    name = "ApprovalDestroy"
-    action {
-      name      = "Destroy"
-      category  = "Approval"
-      owner     = "AWS"
-      provider  = "Manual"
-      version   = "1"
-      run_order = 5
-      configuration = {
-        NotificationArn = aws_sns_topic.this.arn
-      }
-    }
-  }
-
-  stage {
-    name = "TerraformDestroy"
-    action {
-      name            = "Destroy"
-      category        = "Build"
-      owner           = "AWS"
-      provider        = "CodeBuild"
-      version         = "1"
-      run_order       = 6
-      input_artifacts = ["APPLY_ARTIFACT"]
-      configuration = {
-        ProjectName = aws_codebuild_project.this.name
-        EnvironmentVariables = jsonencode([
-          {
-            name  = "ACTION"
-            value = "DESTROY"
-            type  = "PLAINTEXT"
-          }
-        ])
-      }
-    }
-  }
 }
 
 
