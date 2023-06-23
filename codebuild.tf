@@ -65,7 +65,65 @@ resource "aws_iam_role" "codebuild" {
   })
 }
 
+data "aws_iam_policy_document" "codebuild" {
+
+  statement {
+    sid = "s3access"
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:GetBucketVersioning",
+      "s3:PutObjectAcl",
+      "s3:PutObject",
+      "s3:ListBucket",
+    ]
+
+    resources = [aws_s3_bucket.this.arn, "${aws_s3_bucket.this.arn}/*"]
+  }
+
+  statement {
+    sid = "codecommitaccess"
+    actions = [
+      "codecommit:GetBranch",
+      "codecommit:GetCommit",
+      "codecommit:UploadArchive",
+      "codecommit:GetUploadArchiveStatus",
+      "codecommit:CancelUploadArchive"
+    ]
+
+    resources = [aws_codecommit_repository.this.arn]
+  }
+
+  statement {
+    sid = "snsaccess"
+    actions = [
+      "SNS:Publish"
+    ]
+    resources = [
+      aws_sns_topic.this.arn
+    ]
+  }
+
+  statement {
+    sid = "kmsaccess"
+    actions = [
+      "kms:DescribeKey",
+      "kms:GenerateDataKey*",
+      "kms:Encrypt",
+      "kms:ReEncrypt*",
+      "kms:Decrypt"
+    ]
+    resources = [aws_kms_key.this.arn]
+  }
+}
+
+resource "aws_iam_policy" "codebuild" {
+  name   = "codebuild"
+  policy = data.aws_iam_policy_document.codebuild.json
+}
+
 resource "aws_iam_role_policy_attachment" "codebuild" {
   role       = aws_iam_role.codebuild.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  policy_arn = aws_iam_policy.codebuild.arn
 }
+
